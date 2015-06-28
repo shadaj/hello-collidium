@@ -1,6 +1,6 @@
 # hello-collidium
 
-A repository containing branches that represent starting points for each of the videos in the "Hello Collidium!" YouTube series.
+A repository containing branches that represent starting points for each of the videos in the "Hello Collidium!" YouTube series (https://www.youtube.com/playlist?list=PLo_ebKiwsNTpNezm0cY1cRhGkUKrnnTq9).
 
 This repository is based on https://github.com/sjrd/scala-js-example-app
 
