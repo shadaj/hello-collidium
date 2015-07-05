@@ -11,8 +11,15 @@ object HelloCollidium extends js.JSApp {
     val canvasElem = dom.document.getElementById("canvas").asInstanceOf[html.Canvas]
     val canvasContext = canvasElem.getContext("2d").asInstanceOf[CanvasRenderingContext2D]
 
-    val sprites = Seq(new Circle(new Point(250, 250), 50, "lime"), new Box(new Point(10, 10), 480, 480, "black"))
+    var curX = 0
+    var curY = 0
+    dom.setInterval(() => {
+      canvasContext.clearRect(0, 0, 500, 500)
+      val sprites = Seq(new Circle(new Point(curX, curY), 50, "lime"), new Box(new Point(10, 10), 480, 480, "black"))
+      sprites.foreach(_.render(canvasContext))
 
-    sprites.foreach(_.render(canvasContext))
+      curX += 1
+      curY += 1
+    }, 0)
   }
 }
