@@ -2,16 +2,20 @@ package collidium
 
 import org.scalajs.dom.raw.CanvasRenderingContext2D
 
-class Point(val x: Int, val y: Int)
+case class Point(x: Int, y: Int)
 
 abstract class Sprite(color: String) {
+  def location: Point
+
   def render(context: CanvasRenderingContext2D): Unit = {
     context.fillStyle = color
     context.strokeStyle = color
   }
 }
 
-class Circle(location: Point, radius: Int, color: String) extends Sprite(color) {
+class Circle(_location: Point, radius: Int, color: String) extends Sprite(color) {
+  def location = _location
+
   override def render(context: CanvasRenderingContext2D): Unit = {
     super.render(context)
 
@@ -22,11 +26,13 @@ class Circle(location: Point, radius: Int, color: String) extends Sprite(color) 
   }
 }
 
-class Box(topLeft: Point, width: Int, height: Int, color: String) extends Sprite(color) {
+class Box(_location: Point, width: Int, height: Int, color: String) extends Sprite(color) {
+  def location = _location
+
   override def render(context: CanvasRenderingContext2D): Unit = {
     super.render(context)
 
     context.beginPath()
-    context.strokeRect(topLeft.x, topLeft.y, width, height)
+    context.strokeRect(location.x, location.y, width, height)
   }
 }
