@@ -11,3 +11,5 @@ persistLauncher in Compile := true
 libraryDependencies ++= Seq(
     "org.scala-js" %%% "scalajs-dom" % "0.8.0"
 )
+
+jsDependencies += "org.webjars.bower" % "physicsjs" % "0.7.0" / "dist/physicsjs-full.js"

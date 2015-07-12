@@ -8,7 +8,10 @@ import scala.scalajs.js.annotation.JSName
 object Physics extends js.Object {
   def apply(): World = js.native
   def body(shape: String, setup: ShapeSetup): Body = js.native
+  def behavior(name: String): Behavior = js.native
 }
+
+trait Behavior extends js.Object
 
 trait ShapeSetup extends js.Object {
   var x: Double = js.native
@@ -41,6 +44,8 @@ object CircleSetup {
 
 trait World extends js.Object {
   def add(body: Body): Unit = js.native
+  def add(behavior: Behavior): Unit = js.native
+  def step(time: Double): Unit = js.native
 }
 
 trait Body extends js.Object {
@@ -54,4 +59,11 @@ trait BodyState extends js.Object {
 trait Vector extends js.Object {
   def get(i: Int): Double = js.native
   def set(i: Double, value: Double): Unit = js.native
+}
+
+@JSName("Physics.util.ticker")
+object Ticker extends js.Object {
+  def on(function: js.Function1[Double, Unit]): Unit = js.native
+  def off(function: js.Function1[Double, Unit]): Unit = js.native
+  def start(): Unit = js.native
 }
