@@ -14,8 +14,11 @@ object HelloCollidium extends js.JSApp {
 
     val world = Physics()
     world.add(Physics.behavior("constant-acceleration"))
+    world.add(Physics.behavior("body-collision-detection"))
+    world.add(Physics.behavior("body-impulse-response"))
+    world.add(Physics.behavior("sweep-prune"))
 
-    val sprites = Seq(new PhysicsCircle(Point(250, 100), 50, "lime", world), new Box(Point(10, 10), 480, 480, "black"))
+    val sprites = Seq(new PhysicsCircle(Point(250, 100), 50, "lime", world), new PhysicsBox(Point(10, 10), 480, 480, "black", world))
 
     Ticker.on((time: Double) => {
       world.step(time)

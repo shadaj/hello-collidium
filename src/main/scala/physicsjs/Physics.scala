@@ -30,15 +30,34 @@ trait CircleSetup extends ShapeSetup {
 object CircleSetup {
   def apply(x: Double, y: Double,
             vx: Double, vy: Double,
-            treatment: String, radius: Double): CircleSetup = {
+            treatment: String, radius: Double, restitution: Double): CircleSetup = {
     Dynamic.literal(
       x = x,
       y = y,
       vx = vx,
       vy = vy,
       treatment = treatment,
-      radius = radius
+      radius = radius,
+      restitution = restitution
     ).asInstanceOf[CircleSetup]
+  }
+}
+
+trait PolygonSetup extends ShapeSetup {
+  var vertices: js.Array[Vector] = js.native
+}
+
+object PolygonSetup {
+  def apply(x: Double, y: Double, vx: Double, vy: Double,
+            treatment: String, vertices: js.Array[Vector]): PolygonSetup = {
+    Dynamic.literal(
+      x = x,
+      y = y,
+      vx = vx,
+      vy = vy,
+      treatment = treatment,
+      vertices = vertices
+    ).asInstanceOf[PolygonSetup]
   }
 }
 
@@ -59,6 +78,11 @@ trait BodyState extends js.Object {
 trait Vector extends js.Object {
   def get(i: Int): Double = js.native
   def set(i: Double, value: Double): Unit = js.native
+}
+
+@JSName("Physics.vector")
+object Vector extends js.Object {
+  def apply(x: Double, y: Double): Vector = js.native
 }
 
 @JSName("Physics.util.ticker")
