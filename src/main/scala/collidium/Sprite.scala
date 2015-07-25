@@ -51,7 +51,7 @@ class PhysicsCircle(startLocation: Point, radius: Int, color: String, val world:
     startLocation.y,
     0,
     0,
-    "dynamic",
+    "static",
     radius,
     0.5
   )
