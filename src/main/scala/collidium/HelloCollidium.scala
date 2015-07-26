@@ -8,7 +8,10 @@ import scala.scalajs.js
 import org.scalajs.dom
 
 object HelloCollidium extends js.JSApp {
+  val SLING_START = Point(400, 400)
+
   var dragging = false
+  var slingEnd: Option[Point] = None
 
   def main(): Unit = {
     val canvasElem = dom.document.getElementById("canvas").asInstanceOf[html.Canvas]
@@ -20,7 +23,7 @@ object HelloCollidium extends js.JSApp {
     world.add(Physics.behavior("body-impulse-response"))
     world.add(Physics.behavior("sweep-prune"))
 
-    val ball = new PhysicsCircle(Point(250, 100), 50, "lime", world)
+    val ball = new PhysicsCircle(SLING_START, 20, "lime", world)
 
     val sprites = Seq(new PhysicsBox(Point(10, 10), 480, 480, "black", world))
 
@@ -30,17 +33,32 @@ object HelloCollidium extends js.JSApp {
 
       ball.render(canvasContext)
       sprites.foreach(_.render(canvasContext))
+
+      slingEnd.foreach(end => new Line(SLING_START, end, "black").render(canvasContext))
     })
 
     Ticker.start()
 
+    implicit def eventToPoint(e: MouseEvent) = Point(
+      (e.clientX - canvasElem.offsetLeft).toInt,
+      (e.clientY - canvasElem.offsetTop).toInt
+    )
+
+    def updateSlingEnd(newEnd: Point) = {
+      slingEnd = Some(newEnd)
+      ball.body.state.pos = slingEnd.get
+    }
+
     canvasElem.onmousedown = (e: MouseEvent) => {
-      dragging = true
+      if (ball.contains(e)) {
+        dragging = true
+        updateSlingEnd(e)
+      }
     }
 
     canvasElem.onmousemove = (e: MouseEvent) => {
       if (dragging) {
-        ball.body.state.pos = physicsjs.Vector(e.clientX - canvasElem.offsetLeft, e.clientY - canvasElem.offsetTop)
+        updateSlingEnd(e)
       }
     }
 

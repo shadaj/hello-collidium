@@ -5,10 +5,23 @@ import physicsjs._
 
 import scala.scalajs.js
 
-case class Point(x: Int, y: Int)
+case class Point(x: Int, y: Int) {
+  def distanceTo(that: Point) = {
+    val xDiff = that.x - x
+    val yDiff = that.y - y
+
+    Math.sqrt(xDiff*xDiff + yDiff*yDiff)
+  }
+}
+
+object Point {
+  implicit def pointToVector(p: Point) = physicsjs.Vector(p.x, p.y)
+}
 
 abstract class Sprite(color: String) {
   def location: Point
+
+  def contains(point: Point): Boolean
 
   def render(context: CanvasRenderingContext2D): Unit = {
     context.fillStyle = color
@@ -41,6 +54,8 @@ class Circle(_location: Point, radius: Int, color: String) extends Sprite(color)
     context.fill()
     context.stroke()
   }
+
+  def contains(point: Point) = location.distanceTo(point) <= radius
 }
 
 class PhysicsCircle(startLocation: Point, radius: Int, color: String, val world: World) extends
@@ -68,6 +83,8 @@ class Line(startLocation: Point, endLocation: Point, color: String) extends Spri
     context.lineTo(endLocation.x, endLocation.y)
     context.stroke()
   }
+
+  def contains(point: Point) = false
 }
 
 class PhysicsLine(startLocation: Point, endLocation: Point, color: String, val world: World) extends
@@ -97,6 +114,10 @@ class Box(_location: Point, width: Int, height: Int, color: String) extends Spri
     context.beginPath()
     context.strokeRect(location.x, location.y, width, height)
   }
+
+  def contains(point: Point) =
+    point.x >= location.x && point.x <= location.x + width &&
+    point.y >= location.y && point.y <= location.y + height
 }
 
 class PhysicsBox(_location: Point, width: Int, height: Int, color: String, val world: World) extends
