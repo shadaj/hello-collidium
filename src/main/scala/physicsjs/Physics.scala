@@ -69,6 +69,8 @@ trait World extends js.Object {
 
 trait Body extends js.Object {
   var state: BodyState = js.native
+  var treatment: String = js.native
+  def applyForce(f: Vector): Unit = js.native
 }
 
 trait BodyState extends js.Object {

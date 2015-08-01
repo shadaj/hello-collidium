@@ -12,6 +12,7 @@ object HelloCollidium extends js.JSApp {
   val MAX_SLING_DRAG = 50
 
   var dragging = false
+  var started = false
   var slingEnd: Option[Point] = None
 
   def main(): Unit = {
@@ -57,7 +58,7 @@ object HelloCollidium extends js.JSApp {
     }
 
     canvasElem.onmousedown = (e: MouseEvent) => {
-      if (ball.contains(e)) {
+      if (!started && ball.contains(e)) {
         dragging = true
         updateSlingEnd(e)
       }
@@ -70,7 +71,15 @@ object HelloCollidium extends js.JSApp {
     }
 
     canvasElem.onmouseup = (e: MouseEvent) => {
-      dragging = false
+      if (dragging) {
+        dragging = false
+        started = true
+
+        ball.body.treatment = "dynamic"
+        ball.body.applyForce((SLING_START - slingEnd.get) * 1.0 / 100)
+
+        slingEnd = None
+      }
     }
   }
 }
