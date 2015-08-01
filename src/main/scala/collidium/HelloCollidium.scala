@@ -9,6 +9,7 @@ import org.scalajs.dom
 
 object HelloCollidium extends js.JSApp {
   val SLING_START = Point(400, 400)
+  val MAX_SLING_DRAG = 50
 
   var dragging = false
   var slingEnd: Option[Point] = None
@@ -40,12 +41,18 @@ object HelloCollidium extends js.JSApp {
     Ticker.start()
 
     implicit def eventToPoint(e: MouseEvent) = Point(
-      (e.clientX - canvasElem.offsetLeft).toInt,
-      (e.clientY - canvasElem.offsetTop).toInt
+      e.clientX - canvasElem.offsetLeft,
+      e.clientY - canvasElem.offsetTop
     )
 
-    def updateSlingEnd(newEnd: Point) = {
-      slingEnd = Some(newEnd)
+    def updateSlingEnd(maybeNewEnd: Point) = {
+      val distance = SLING_START.distanceTo(maybeNewEnd)
+      if (distance <= MAX_SLING_DRAG) {
+        slingEnd = Some(maybeNewEnd)
+      } else {
+        slingEnd = Some(SLING_START + ((maybeNewEnd - SLING_START) * (MAX_SLING_DRAG / distance)))
+      }
+
       ball.body.state.pos = slingEnd.get
     }
 

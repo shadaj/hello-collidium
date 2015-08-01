@@ -5,12 +5,28 @@ import physicsjs._
 
 import scala.scalajs.js
 
-case class Point(x: Int, y: Int) {
+case class Point(x: Double, y: Double) {
   def distanceTo(that: Point) = {
     val xDiff = that.x - x
     val yDiff = that.y - y
 
     Math.sqrt(xDiff*xDiff + yDiff*yDiff)
+  }
+
+  def +(that: Point) = {
+    Point(x + that.x, y + that.y)
+  }
+
+  def -(that: Point) = {
+    Point(x - that.x, y - that.y)
+  }
+
+  def *(scale: Double) = {
+    Point(x * scale, y * scale)
+  }
+
+  def /(scale: Double) = {
+    Point(x / scale, y / scale)
   }
 }
 
