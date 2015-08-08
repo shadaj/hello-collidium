@@ -59,7 +59,7 @@ trait Physics { this: Sprite =>
   override def location = Point(body.state.pos.get(0).toInt, body.state.pos.get(1).toInt)
 }
 
-class Circle(_location: Point, radius: Int, color: String) extends Sprite(color) {
+class Circle(_location: Point, val radius: Int, color: String) extends Sprite(color) {
   def location = _location
 
   override def render(context: CanvasRenderingContext2D): Unit = {
@@ -72,6 +72,9 @@ class Circle(_location: Point, radius: Int, color: String) extends Sprite(color)
   }
 
   def contains(point: Point) = location.distanceTo(point) <= radius
+  def contains(circle: Circle) = {
+    circle.location.distanceTo(location) <= radius - circle.radius
+  }
 }
 
 class PhysicsCircle(startLocation: Point, radius: Int, color: String, val world: World) extends

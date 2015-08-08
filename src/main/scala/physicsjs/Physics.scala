@@ -65,6 +65,7 @@ trait World extends js.Object {
   def add(body: Body): Unit = js.native
   def add(behavior: Behavior): Unit = js.native
   def step(time: Double): Unit = js.native
+  def pause(): Unit = js.native
 }
 
 trait Body extends js.Object {

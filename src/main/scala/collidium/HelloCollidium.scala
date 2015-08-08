@@ -26,6 +26,7 @@ object HelloCollidium extends js.JSApp {
     world.add(Physics.behavior("sweep-prune"))
 
     val ball = new PhysicsCircle(SLING_START, 20, "lime", world)
+    val hole = new Circle(Point(80, 80), 40, "red")
 
     val sprites = Seq(new PhysicsBox(Point(10, 10), 480, 480, "black", world))
 
@@ -33,10 +34,16 @@ object HelloCollidium extends js.JSApp {
       world.step(time)
       canvasContext.clearRect(0, 0, 500, 500)
 
+      hole.render(canvasContext)
       ball.render(canvasContext)
+
       sprites.foreach(_.render(canvasContext))
 
       slingEnd.foreach(end => new Line(SLING_START, end, "black").render(canvasContext))
+
+      if (started) {
+        if (hole.contains(ball)) world.pause()
+      }
     })
 
     Ticker.start()
