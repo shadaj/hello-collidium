@@ -8,7 +8,16 @@ import scala.scalajs.js
 import org.scalajs.dom
 
 object HelloCollidium extends js.JSApp {
-  val SLING_START = Point(400, 400)
+  val levelToPickle = Level(
+    PhysicsCircleSpriteInfo(Point(400, 400), 20, "lime"),
+    CircleSpriteInfo(Point(80, 80), 40, "red"),
+    List(PhysicsBoxSpriteInfo(Point(10, 10), 480, 480, "black"))
+  )
+
+  val json = LevelStorage.writeLevel(levelToPickle)
+  val level: Level = LevelStorage.readLevel(json)
+
+  val SLING_START = level.ball.location
   val MAX_SLING_DRAG = 50
 
   var dragging = false
@@ -25,10 +34,10 @@ object HelloCollidium extends js.JSApp {
     world.add(Physics.behavior("body-impulse-response"))
     world.add(Physics.behavior("sweep-prune"))
 
-    val ball = new PhysicsCircle(SLING_START, 20, "lime", world)
-    val hole = new Circle(Point(80, 80), 40, "red")
+    val ball = level.ball.createSprite(world)
+    val hole = level.hole.createSprite(world)
 
-    val sprites = Seq(new PhysicsBox(Point(10, 10), 480, 480, "black", world))
+    val sprites = level.obstacles.map(_.createSprite(world))
 
     Ticker.on((time: Double) => {
       world.step(time)
